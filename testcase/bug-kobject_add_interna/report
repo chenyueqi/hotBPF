@@ -1,0 +1,52 @@
+debugfs: Directory '200' with parent 'hci0' already present!
+list_add double add: new=ffff88808d848420, prev=ffff88808d848420, next=ffff88821b777b00.
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:29!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 6860 Comm: kworker/u5:2 Not tainted 5.8.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: hci0 hci_rx_work
+RIP: 0010:__list_add_valid.cold+0x26/0x3c lib/list_debug.c:29
+Code: 57 ff ff ff 4c 89 e1 48 c7 c7 60 cc 93 88 e8 f1 34 c1 fd 0f 0b 48 89 f2 4c 89 e1 48 89 ee 48 c7 c7 a0 cd 93 88 e8 da 34 c1 fd <0f> 0b 48 89 f1 48 c7 c7 20 cd 93 88 4c 89 e6 e8 c6 34 c1 fd 0f 0b
+RSP: 0018:ffffc90004b97830 EFLAGS: 00010282
+RAX: 0000000000000058 RBX: ffff88821b777b00 RCX: 0000000000000000
+RDX: ffff88808aa14040 RSI: ffffffff815db477 RDI: fffff52000972ef8
+RBP: ffff88808d848420 R08: 0000000000000058 R09: ffff8880ae631927
+R10: 0000000000000000 R11: 000000000009e4e8 R12: ffff88821b777b00
+R13: ffff88808879d288 R14: ffff88808d848438 R15: ffff88808d848420
+FS:  0000000000000000(0000) GS:ffff8880ae600000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000000 CR3: 0000000009a8d000 CR4: 00000000001506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ __list_add include/linux/list.h:67 [inline]
+ list_add_tail include/linux/list.h:100 [inline]
+ kobj_kset_join lib/kobject.c:196 [inline]
+ kobject_add_internal+0x18d/0x940 lib/kobject.c:246
+ kobject_add_varg lib/kobject.c:390 [inline]
+ kobject_add+0x150/0x1c0 lib/kobject.c:442
+ device_add+0x35a/0x1c40 drivers/base/core.c:2863
+ hci_conn_add_sysfs+0x84/0xe0 net/bluetooth/hci_sysfs.c:53
+ hci_conn_complete_evt net/bluetooth/hci_event.c:2623 [inline]
+ hci_event_packet+0x1286/0x87a8 net/bluetooth/hci_event.c:6058
+ hci_rx_work+0x22e/0xb50 net/bluetooth/hci_core.c:4889
+ process_one_work+0x94c/0x1670 kernel/workqueue.c:2269
+ worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
+ kthread+0x3b5/0x4a0 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+Modules linked in:
+---[ end trace 3b6504ead81e9552 ]---
+RIP: 0010:__list_add_valid.cold+0x26/0x3c lib/list_debug.c:29
+Code: 57 ff ff ff 4c 89 e1 48 c7 c7 60 cc 93 88 e8 f1 34 c1 fd 0f 0b 48 89 f2 4c 89 e1 48 89 ee 48 c7 c7 a0 cd 93 88 e8 da 34 c1 fd <0f> 0b 48 89 f1 48 c7 c7 20 cd 93 88 4c 89 e6 e8 c6 34 c1 fd 0f 0b
+RSP: 0018:ffffc90004b97830 EFLAGS: 00010282
+RAX: 0000000000000058 RBX: ffff88821b777b00 RCX: 0000000000000000
+RDX: ffff88808aa14040 RSI: ffffffff815db477 RDI: fffff52000972ef8
+RBP: ffff88808d848420 R08: 0000000000000058 R09: ffff8880ae631927
+R10: 0000000000000000 R11: 000000000009e4e8 R12: ffff88821b777b00
+R13: ffff88808879d288 R14: ffff88808d848438 R15: ffff88808d848420
+FS:  0000000000000000(0000) GS:ffff8880ae600000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000000 CR3: 0000000009a8d000 CR4: 00000000001506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400

@@ -1,0 +1,16 @@
+__dump_stack lib/dump_stack.c:77
+dump_stack lib/dump_stack.c:113
+print_address_description mm/kasan/report.c:187
+kasan_report mm/kasan/report.c:317
+__asan_report_load8_noabort mm/kasan/generic_report.c:135
+cma_listen_on_all drivers/infiniband/core/cma.c:2477
+rdma_listen drivers/infiniband/core/cma.c:3492
+ucma_listen drivers/infiniband/core/ucma.c:1100
+ucma_write drivers/infiniband/core/ucma.c:1689
+__vfs_write fs/read_write.c:485
+vfs_write fs/read_write.c:549
+ksys_write fs/read_write.c:598
+__do_sys_write fs/read_write.c:610
+__se_sys_write fs/read_write.c:607
+__x64_sys_write fs/read_write.c:607
+do_syscall_64 arch/x86/entry/common.c:290

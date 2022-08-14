@@ -1,0 +1,106 @@
+==================================================================
+BUG: KASAN: use-after-free in instrument_atomic_write include/linux/instrumented.h:71 [inline]
+BUG: KASAN: use-after-free in atomic_dec_and_test include/asm-generic/atomic-instrumented.h:748 [inline]
+BUG: KASAN: use-after-free in hci_conn_drop include/net/bluetooth/hci_core.h:1116 [inline]
+BUG: KASAN: use-after-free in sco_chan_del net/bluetooth/sco.c:149 [inline]
+BUG: KASAN: use-after-free in __sco_sock_close+0x47c/0xed0 net/bluetooth/sco.c:434
+Write of size 4 at addr ffff8880a6ff8010 by task syz-executor236/7006
+
+CPU: 0 PID: 7006 Comm: syz-executor236 Not tainted 5.8.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x1f0/0x31e lib/dump_stack.c:118
+ print_address_description+0x66/0x5a0 mm/kasan/report.c:383
+ __kasan_report mm/kasan/report.c:513 [inline]
+ kasan_report+0x132/0x1d0 mm/kasan/report.c:530
+ check_memory_region_inline mm/kasan/generic.c:183 [inline]
+ check_memory_region+0x2b5/0x2f0 mm/kasan/generic.c:192
+ instrument_atomic_write include/linux/instrumented.h:71 [inline]
+ atomic_dec_and_test include/asm-generic/atomic-instrumented.h:748 [inline]
+ hci_conn_drop include/net/bluetooth/hci_core.h:1116 [inline]
+ sco_chan_del net/bluetooth/sco.c:149 [inline]
+ __sco_sock_close+0x47c/0xed0 net/bluetooth/sco.c:434
+ sco_sock_close net/bluetooth/sco.c:448 [inline]
+ sco_sock_release+0x63/0x4f0 net/bluetooth/sco.c:1053
+ __sock_release net/socket.c:596 [inline]
+ sock_close+0xd8/0x260 net/socket.c:1277
+ __fput+0x2f0/0x750 fs/file_table.c:281
+ task_work_run+0x137/0x1c0 kernel/task_work.c:135
+ exit_task_work include/linux/task_work.h:25 [inline]
+ do_exit+0x5f3/0x1f20 kernel/exit.c:806
+ do_group_exit+0x161/0x2d0 kernel/exit.c:903
+ get_signal+0x139b/0x1d30 kernel/signal.c:2743
+ arch_do_signal+0x33/0x610 arch/x86/kernel/signal.c:811
+ exit_to_user_mode_loop kernel/entry/common.c:135 [inline]
+ exit_to_user_mode_prepare+0x8d/0x1c0 kernel/entry/common.c:166
+ syscall_exit_to_user_mode+0x5e/0x1a0 kernel/entry/common.c:241
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x446eb9
+Code: Bad RIP value.
+RSP: 002b:00007ffe6f094b58 EFLAGS: 00000246 ORIG_RAX: 000000000000002a
+RAX: fffffffffffffffc RBX: 0000000000000003 RCX: 0000000000446eb9
+RDX: 0000000000000008 RSI: 00000000200000c0 RDI: 0000000000000004
+RBP: 0000000000000004 R08: 0000000000000002 R09: 00000000000300ff
+R10: 0000000000000004 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000407b10 R14: 0000000000000000 R15: 0000000000000000
+
+Allocated by task 7006:
+ save_stack mm/kasan/common.c:48 [inline]
+ set_track mm/kasan/common.c:56 [inline]
+ __kasan_kmalloc+0x103/0x140 mm/kasan/common.c:494
+ kmem_cache_alloc_trace+0x234/0x300 mm/slab.c:3551
+ kmalloc include/linux/slab.h:555 [inline]
+ kzalloc include/linux/slab.h:669 [inline]
+ hci_conn_add+0x5d/0x1040 net/bluetooth/hci_conn.c:525
+ hci_connect_sco+0x2aa/0xa20 net/bluetooth/hci_conn.c:1283
+ sco_connect net/bluetooth/sco.c:241 [inline]
+ sco_sock_connect+0x2de/0xaa0 net/bluetooth/sco.c:588
+ __sys_connect_file net/socket.c:1853 [inline]
+ __sys_connect+0x2da/0x360 net/socket.c:1870
+ __do_sys_connect net/socket.c:1881 [inline]
+ __se_sys_connect net/socket.c:1878 [inline]
+ __x64_sys_connect+0x76/0x80 net/socket.c:1878
+ do_syscall_64+0x31/0x70 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+
+Freed by task 7005:
+ save_stack mm/kasan/common.c:48 [inline]
+ set_track mm/kasan/common.c:56 [inline]
+ kasan_set_free_info mm/kasan/common.c:316 [inline]
+ __kasan_slab_free+0x114/0x170 mm/kasan/common.c:455
+ __cache_free mm/slab.c:3426 [inline]
+ kfree+0x10a/0x220 mm/slab.c:3757
+ device_release+0x70/0x1a0 drivers/base/core.c:1796
+ kobject_cleanup lib/kobject.c:704 [inline]
+ kobject_release lib/kobject.c:735 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x1a0/0x2c0 lib/kobject.c:752
+ hci_conn_del+0x2c2/0x550 net/bluetooth/hci_conn.c:645
+ hci_phy_link_complete_evt net/bluetooth/hci_event.c:4940 [inline]
+ hci_event_packet+0x82c8/0x17e10 net/bluetooth/hci_event.c:6205
+ hci_rx_work+0x246/0xa20 net/bluetooth/hci_core.c:4889
+ process_one_work+0x789/0xfc0 kernel/workqueue.c:2269
+ worker_thread+0xaa4/0x1460 kernel/workqueue.c:2415
+ kthread+0x37e/0x3a0 drivers/block/aoe/aoecmd.c:1234
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+
+The buggy address belongs to the object at ffff8880a6ff8000
+ which belongs to the cache kmalloc-4k of size 4096
+The buggy address is located 16 bytes inside of
+ 4096-byte region [ffff8880a6ff8000, ffff8880a6ff9000)
+The buggy address belongs to the page:
+page:ffffea00029bfe00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 head:ffffea00029bfe00 order:1 compound_mapcount:0
+flags: 0xfffe0000010200(slab|head)
+raw: 00fffe0000010200 ffffea00024f5608 ffffea00029bf888 ffff8880aa402000
+raw: 0000000000000000 ffff8880a6ff8000 0000000100000001 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff8880a6ff7f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff8880a6ff7f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff8880a6ff8000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                         ^
+ ffff8880a6ff8080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8880a6ff8100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================

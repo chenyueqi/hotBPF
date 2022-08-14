@@ -1,0 +1,16 @@
+__list_add_valid lib/list_debug.c:29
+__list_add include/linux/list.h:67
+list_add_tail include/linux/list.h:100
+kobj_kset_join lib/kobject.c:196
+kobject_add_internal lib/kobject.c:246
+kobject_add_varg lib/kobject.c:390
+kobject_add lib/kobject.c:442
+device_add drivers/base/core.c:2863
+hci_conn_add_sysfs net/bluetooth/hci_sysfs.c:53
+hci_conn_complete_evt net/bluetooth/hci_event.c:2623
+hci_event_packet net/bluetooth/hci_event.c:6058
+hci_rx_work net/bluetooth/hci_core.c:4889
+process_one_work kernel/workqueue.c:2269
+worker_thread kernel/workqueue.c:2415
+kthread kernel/kthread.c:292
+ret_from_fork arch/x86/entry/entry_64.S:294

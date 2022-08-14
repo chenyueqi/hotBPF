@@ -49,7 +49,7 @@ Our analyzer depends on LLVM-10, so make sure LLVM-10 is installed. Follow [here
 
 ### Step 5: obtain allocation sites of vulnerable structures
 ```bash
-./build/lib/analyzer -struct hci_conn `find `../../testcase/bug-kobject_add_internal/linux-bitcode/ -name "*.bc"`
+./build/lib/analyzer -struct hci_conn `find ../../testcase/bug-kobject_add_internal/linux-bitcode/ -name "*.bc"`
 ```
 
 ## Dynaimic Isolation
