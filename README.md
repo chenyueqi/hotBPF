@@ -53,3 +53,32 @@ Our analyzer depends on LLVM-10, so make sure LLVM-10 is installed. Follow [here
 ```
 
 ## Dynaimic Isolation
+In this part, `hotBPF` installs eBPF programs to the kernel to intercept the allocation of `struct hci_conn` and divert it to virtual memory allocator.
+
+Continue using `bug-kobject_add_internal` as an example, we demonstrate how to harden ubuntu distro
+
+### Step 1: build and install hardened kernel image
+```bash
+mkdir -p baremetal/linux-5.8-harden
+cd baremetal/linux-5.8-harden
+wget https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/linux-5.8.tar.gz
+tar xvf linux-5.8.tar.gz
+cd linux-5.8
+```
+
+Copy and paste all patch files in [patch/linux-5.8-helper-patch/linux](https://github.com/chenyueqi/hotBPF/tree/master/patch/linux-5.8-helper-patch/linux)
+
+```bash
+make -j4 deb-pkg
+cd ..
+sudo dpkg -i linux-*.deb
+```
+
+Reboot the whole system to run hardened kernel
+
+### Step 2: compile and install 
+```
+cd src/bpf/bug-kobject_add_internal
+make
+sudo ./hotbpf
+```
