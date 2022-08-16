@@ -47,10 +47,19 @@ Our analyzer depends on LLVM-10, so make sure LLVM-10 is installed. Follow [here
 ### Step 4: run analyer to identify vulenrable structure
 `python run_analyzer.py ../../testcase/bug-kobject_add_internal`
 
+Output: 
+`Found:
+struct.hci_conn`
+
 ### Step 5: obtain allocation sites of vulnerable structures
 ```bash
 ./build/lib/analyzer -struct hci_conn `find ../../testcase/bug-kobject_add_internal/linux-bitcode/ -name "*.bc"`
 ```
+
+Output:
+`dumping location of allocating hci_conn 
+hci_conn_add net/bluetooth/hci_conn.c:525  
+`
 
 ## Dynamic Isolation
 In this part, `hotBPF` installs eBPF programs to the kernel to intercept the allocation of `struct hci_conn` and divert it to virtual memory allocator.
