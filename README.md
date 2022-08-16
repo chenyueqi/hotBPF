@@ -52,7 +52,7 @@ Our analyzer depends on LLVM-10, so make sure LLVM-10 is installed. Follow [here
 ./build/lib/analyzer -struct hci_conn `find ../../testcase/bug-kobject_add_internal/linux-bitcode/ -name "*.bc"`
 ```
 
-## Dynaimic Isolation
+## Dynamic Isolation
 In this part, `hotBPF` installs eBPF programs to the kernel to intercept the allocation of `struct hci_conn` and divert it to virtual memory allocator.
 
 Continue using `bug-kobject_add_internal` as an example, we demonstrate how to harden ubuntu distro
@@ -76,7 +76,7 @@ sudo dpkg -i linux-*.deb
 
 Reboot the whole system to run hardened kernel
 
-### Step 2: compile and install 
+### Step 2: compile and install eBPF program
 ```
 cd src/bpf/bug-kobject_add_internal
 make
