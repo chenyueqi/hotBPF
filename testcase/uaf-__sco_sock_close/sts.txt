@@ -1,2 +1,0 @@
-atomic_t
-hci_conn

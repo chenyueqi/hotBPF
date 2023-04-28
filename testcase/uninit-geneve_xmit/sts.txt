@@ -1,3 +1,0 @@
-geneve_dev
-net_device
-sk_buff
